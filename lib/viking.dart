@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/sprite.dart';
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/sprite_body_component.dart';
 import 'package:forge2d/forge2d.dart';
 
@@ -34,23 +34,24 @@ class Viking extends SpriteBodyComponent {
     fixtureDef.friction = 0.2;
 
     final bodyDef = BodyDef();
-    bodyDef.setUserData(this);
+    bodyDef.userData = this;
     bodyDef.position = viewport.getScreenToWorld(startPosition);
     bodyDef.angle = Random().nextDouble() * 2 * 3.14;
     bodyDef.type = BodyType.DYNAMIC;
-    bodyDef.setAngularDamping(1.0);
+    bodyDef.angularDamping = 1.0;
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
-  
+
   @override
   void update(double dt) {
     super.update(dt);
-    if(smacked) {
-      body.applyLinearImpulse(Vector2(0, 1000), body.getLocalCenter(), true);
+    if (smacked) {
+      body.applyLinearImpulse(Vector2(0, 1000),
+          point: body.getLocalCenter(), wake: true);
       smacked = false;
     }
   }
-  
+
   @override
   void renderPolygon(Canvas canvas, List<Offset> points) {}
 }
@@ -59,11 +60,10 @@ class EvilViking extends Viking {
   double timeToReset = 0;
 
   EvilViking(Vector2 startPosition, Image image) : super(startPosition, image);
-  
+
   @override
   void update(double dt) {
     super.update(dt);
     timeToReset = max(0.0, timeToReset - dt);
   }
 }
-

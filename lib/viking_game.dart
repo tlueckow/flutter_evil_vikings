@@ -1,10 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/extensions/offset.dart';
 import 'package:flame_forge2d/contact_callbacks.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
@@ -28,9 +27,9 @@ class VikingGame extends Forge2DGame with TapDetector {
   void onResize(Vector2 size) {
     super.onResize(size);
     // Add a background
-    _background?.remove();
-    _background = SpriteComponent.fromImage(size, _backgroundImage);
-    add(_background);
+    // _background?.remove();
+    // _background = SpriteComponent.fromImage(size, _backgroundImage);
+    // add(_background);
 
     // Add walls so that the bodies don't move outside of the screen
     removeAll(walls);
@@ -51,7 +50,7 @@ class VikingGame extends Forge2DGame with TapDetector {
     super.onTapDown(details);
     final position = details.localPosition.toVector2();
 
-    if(Random().nextDouble() > 0.2) {
+    if (Random().nextDouble() > 0.2) {
       add(Viking(position, _vikingImage));
     } else {
       add(EvilViking(position, _evilVikingImage));
@@ -69,5 +68,3 @@ class EvilContactCallback extends ContactCallback<Viking, EvilViking> {
   @override
   void end(Viking viking, EvilViking evilViking, Contact contact) {}
 }
-
-
